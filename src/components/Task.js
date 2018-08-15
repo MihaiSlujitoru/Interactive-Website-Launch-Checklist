@@ -3,50 +3,36 @@ import React from "react";
 class Task extends React.Component {
 	handleCheck = () => {
 		let check = false;
-		if (this.props.task.completed === false && this.props.task.applicable) {
+		if (this.props.task.completed === false) {
 			check = true;
 		}
 
 		const updateTask = {
 			...this.props.task,
-			completed: check,
-			applicable: true
-		};
-
-		this.props.completeTask(this.props.module, this.props.index, updateTask);
-	};
-
-	handleApplicable = () => {
-		let check = true;
-		if (this.props.task.applicable === true) {
-			check = false;
-		}
-
-		const updateTask = {
-			...this.props.task,
-			applicable: check,
-			complete: false
+			completed: check
 		};
 
 		this.props.completeTask(this.props.module, this.props.index, updateTask);
 	};
 
 	render() {
-		const { text, completed, applicable } = this.props.task;
+		const { text, completed } = this.props.task;
 		let item = "";
 		const isCompleted = completed === true;
-		const isApplicable = applicable === true;
-		if (isCompleted && isApplicable) {
+		if (isCompleted) {
 			item = "checked";
-		} else if (!isApplicable) {
-			item = "notapplicable";
 		}
 		return (
 			<li className={`item ${item}`}>
 				<span className="checkbox" onClick={this.handleCheck}>
 					<i className="fa fa-check" />
 				</span>
-				<i className="fa fa-minus-circle na" onClick={this.handleApplicable} />
+				<i
+					className="fa fa-minus-circle na"
+					onClick={() =>
+						this.props.deleteTask(this.props.module, this.props.index)
+					}
+				/>
 				<p>{text}</p>
 			</li>
 		);

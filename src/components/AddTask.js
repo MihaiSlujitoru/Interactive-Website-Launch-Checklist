@@ -9,8 +9,7 @@ class AddTask extends React.Component {
 		// 2. Save the variable into a object
 		const task = {
 			text: this.newTask.current.value,
-			completed: false,
-			applicable: true
+			completed: false
 		};
 		// 3. Send new task into state
 		this.props.addTask(this.props.module, task);

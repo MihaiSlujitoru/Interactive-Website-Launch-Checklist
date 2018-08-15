@@ -20,6 +20,7 @@ class Tasks extends React.Component {
 						module={this.props.index}
 						index={key}
 						task={this.props.tasksToDo.tasks[key]}
+						deleteTask={this.props.deleteTask}
 						completeTask={this.props.completeTask}
 					/>
 				))}

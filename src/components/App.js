@@ -1,20 +1,13 @@
 import React from "react";
-import Tasks from "./components/Tasks";
-import content from "./content";
+import Tasks from "./Tasks";
+import content from "../content";
 
 class App extends React.Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = { tasksToDo: content };
-	// }
-
-	state = {
-		tasksToDo: content
-	};
+	state = { tasksToDo: "" };
 
 	componentDidMount() {
+		this.setState({ tasksToDo: JSON.parse(JSON.stringify(content)) });
 		const localStorageRef = localStorage.getItem(window.location.href);
-
 		if (localStorageRef) {
 			this.setState({ tasksToDo: JSON.parse(localStorageRef) });
 		}
@@ -37,25 +30,36 @@ class App extends React.Component {
 			tasksToDo: moduleItem
 		});
 
-		this.addToStorage();
+		// this.addToStorage();
 	};
 
 	completeTask = (module, key, updateTask) => {
 		// 1. Take a copy of the existing state
 		const moduleItem = { ...this.state.tasksToDo };
-
 		// 2. Update our task
 		moduleItem[module].tasks[key] = updateTask;
 		// 3. Set the new state
 		this.setState({
 			tasksToDo: moduleItem
 		});
-		this.addToStorage();
+		// this.addToStorage();
+	};
+
+	deleteTask = (module, key) => {
+		// 1. Take a copy of the existing state
+		const tasks = { ...this.state.tasksToDo };
+
+		// 2. Remove the task from the state
+		delete tasks[module].tasks[key];
+
+		// 3. Set the new state
+		this.setState({ tasksToDo: tasks });
 	};
 
 	resetTasks = () => {
 		localStorage.removeItem(window.location.href);
-		this.setState({ tasksToDo: content });
+
+		this.setState({ tasksToDo: JSON.parse(JSON.stringify(content)) });
 	};
 
 	render() {
@@ -66,7 +70,8 @@ class App extends React.Component {
 						To reset your current session, click{" "}
 						<span className="reset" onClick={this.resetTasks}>
 							<b>Reset</b>
-						</span>.
+						</span>
+						.
 					</p>
 				</ul>
 
@@ -75,6 +80,7 @@ class App extends React.Component {
 						key={key}
 						index={key}
 						tasksToDo={this.state.tasksToDo[key]}
+						deleteTask={this.deleteTask}
 						completeTask={this.completeTask}
 						addTask={this.addTask}
 					/>
@@ -83,5 +89,4 @@ class App extends React.Component {
 		);
 	}
 }
-
 export default App;
